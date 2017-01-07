@@ -1,0 +1,26 @@
+publish_time: 'Время публикации'
+section: 'Раздел'
+tags: 'Теги'
+external_links: 'Ссылки'
+add_link: 'Добавить ссылку'
+starred: 'Закреплено'
+word_yes: 'Да'
+section_used_by_entity: 'Раздел ":section_title" используется :entity_model, ":entity_title"'
+
+odm_ui_browser_title_article: 'Статьи'
+odm_ui_form_title_create_article: 'Создание статьи'
+odm_ui_form_title_modify_article: 'Изменение статьи'
+odm_ui_form_title_delete_article: 'Удаление статей'
+
+odm_auth_create_article: 'Создание статей'
+odm_auth_view_own_article: 'Просмотр СВОИХ статей'
+odm_auth_view_article: 'Просмотр ВСЕХ статей'
+odm_auth_modify_own_article: 'Изменение СВОИХ статей'
+odm_auth_modify_article: 'Изменение ЛЮБЫХ статей'
+odm_auth_delete_own_article: 'Удаление СВОИХ статей'
+odm_auth_delete_article: 'Удаление ЛЮБЫХ статей'
+
+content_perm_bypass_moderation_article: 'Публикация статей без модерации'
+content_perm_set_localization_article: 'Управление локализацией статей'
+content_perm_set_publish_time_article: 'Управление временем публикации статей'
+content_perm_set_starred_article: "Устанавливать флаг 'Закрепелно' для статей"

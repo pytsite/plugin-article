@@ -1,0 +1,23 @@
+{
+  "description": {
+    "en": "Article",
+    "ru": "Article",
+    "uk": "Article"
+  },
+  "url": "https://github.com/pytsite/plugin-article",
+  "author": {
+    "name": "Alexander Shepetko",
+    "email": "a@shepetko.com",
+    "url": "https://shepetko.com"
+  },
+  "requires": {
+    "packages": [],
+    "plugins": [
+      "content",
+      "taxonomy",
+      "section",
+      "tag",
+      "comments"
+    ]
+  }
+}
