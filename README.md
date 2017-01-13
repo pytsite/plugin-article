@@ -2,5 +2,11 @@
 
 ## Changelog
 
+
+### 0.2 (2017-01-13)
+- Field **description** moved to [Content](https://github.com/pytsite/plugin-content) plugin.
+- Indexes reviewed.
+
+
 ### 0.1 (2017-01-07)
 First release.

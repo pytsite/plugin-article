@@ -58,7 +58,6 @@ class Article(_content.model.Content):
         self.get_field('body').required = True
 
         self.define_field(_odm.field.Ref('route_alias', model='route_alias', required=True))
-        self.define_field(_odm.field.String('description', strip_html=True))
         self.define_field(_odm.field.DateTime('publish_time', default=_datetime.now()))
         self.define_field(_odm.field.RefsUniqueList('tags', model='tag'))
         self.define_field(_odm.field.Ref('section', model='section', required=True))
@@ -75,23 +74,9 @@ class Article(_content.model.Content):
         """
         super()._setup_indexes()
 
-        if self.has_field('ext_links'):
-            self.define_index([('ext_links', _odm.I_ASC)])
-
-        if self.has_field('publish_time'):
-            self.define_index([('publish_time', _odm.I_DESC)])
-
-        # Text index
-        if self.has_field('description') and self.has_field('body'):
-            self.define_index([('title', _odm.I_TEXT), ('description', _odm.I_TEXT), ('body', _odm.I_TEXT)])
-        elif self.has_field('description'):
-            self.define_index([('title', _odm.I_TEXT), ('description', _odm.I_TEXT)])
-        elif self.has_field('body'):
-            self.define_index([('title', _odm.I_TEXT), ('body', _odm.I_TEXT)])
-
-    @property
-    def description(self) -> str:
-        return self.f_get('description')
+        for f in 'route_alias', 'publish_time', 'section', 'starred', 'views_count', 'comments_count':
+            if self.has_field(f):
+                self.define_index([(f, _odm.I_ASC)])
 
     @property
     def tags(self) -> _Tuple[_tag.model.Tag]:
@@ -364,21 +349,11 @@ class Article(_content.model.Content):
                 required=self.get_field('section').required,
             ))
 
-        # Description
-        if self.has_field('description'):
-            frm.add_widget(_widget.input.Text(
-                uid='description',
-                weight=300,
-                label=self.t('description'),
-                value=self.description,
-                required=self.get_field('description').required,
-            ))
-
         # Tags
         if self.has_field('tags'):
             frm.add_widget(_taxonomy.widget.TokensInput(
                 uid='tags',
-                weight=350,
+                weight=450,
                 model='tag',
                 label=self.t('tags'),
                 value=self.tags,
@@ -389,7 +364,7 @@ class Article(_content.model.Content):
         if self.has_field('ext_links'):
             frm.add_widget(_widget.input.StringList(
                 uid='ext_links',
-                weight=900,
+                weight=1100,
                 label=self.t('external_links'),
                 add_btn_label=self.t('add_link'),
                 value=self.ext_links,
@@ -403,7 +378,7 @@ class Article(_content.model.Content):
             if current_user.has_permission('content.set_publish_time.' + self.model):
                 frm.add_widget(_widget.select.DateTime(
                     uid='publish_time',
-                    weight=950,
+                    weight=1300,
                     label=self.t('publish_time'),
                     value=_datetime.now() if self.is_new else self.publish_time,
                     h_size='col-sm-4 col-md-3 col-lg-2',
@@ -415,7 +390,7 @@ class Article(_content.model.Content):
             # Route alias
             frm.add_widget(_widget.input.Text(
                 uid='route_alias',
-                weight=1400,
+                weight=2000,
                 label=self.t('path'),
                 value=self.route_alias.alias if self.route_alias else '',
                 enabled=not self.comments_count,
