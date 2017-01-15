@@ -3,6 +3,10 @@
 ## Changelog
 
 
+### 0.2.2 (2017-01-15)
+`route_alias` field moved to [Content](https://github.com/pytsite/plugin-content) plugin's model.
+
+
 ### 0.2.1 (2017-01-15)
 JS form helper moved to [Content](https://github.com/pytsite/plugin-content) plugin.
 

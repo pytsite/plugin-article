@@ -1,10 +1,9 @@
 """PytSite Article Plugin Models.
 """
-from datetime import datetime as _datetime, timedelta as _timedelta
+from datetime import datetime as _datetime
 from typing import Tuple as _Tuple
-from pytsite import auth as _auth, odm_ui as _odm_ui, route_alias as _route_alias, odm as _odm, widget as _widget, \
-    validation as _validation, router as _router, lang as _lang, assetman as _assetman, util as _util, form as _form, \
-    events as _events, errors as _errors
+from pytsite import auth as _auth, odm_ui as _odm_ui, odm as _odm, widget as _widget, validation as _validation, \
+    router as _router, lang as _lang, util as _util, form as _form, events as _events, errors as _errors
 from plugins import content as _content, comments as _comments, taxonomy as _taxonomy, tag as _tag, section as _section
 
 __author__ = 'Alexander Shepetko'
@@ -12,7 +11,7 @@ __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
 
-class Article(_content.model.Content):
+class Article(_content.model.ContentWithURL):
     """Article Model.
     """
 
@@ -57,7 +56,6 @@ class Article(_content.model.Content):
         self.get_field('images').required = True
         self.get_field('body').required = True
 
-        self.define_field(_odm.field.Ref('route_alias', model='route_alias', required=True))
         self.define_field(_odm.field.DateTime('publish_time', default=_datetime.now()))
         self.define_field(_odm.field.RefsUniqueList('tags', model='tag'))
         self.define_field(_odm.field.Ref('section', model='section', required=True))
@@ -74,7 +72,7 @@ class Article(_content.model.Content):
         """
         super()._setup_indexes()
 
-        for f in 'route_alias', 'publish_time', 'section', 'starred', 'views_count', 'comments_count':
+        for f in 'publish_time', 'section', 'starred', 'views_count', 'comments_count':
             if self.has_field(f):
                 self.define_index([(f, _odm.I_ASC)])
 
@@ -88,20 +86,6 @@ class Article(_content.model.Content):
             'id': '0' if self.is_new else str(self.id),
             '__redirect': 'ENTITY_VIEW',
         })
-
-    def odm_ui_view_url(self) -> str:
-        if self.is_new:
-            raise RuntimeError("Cannot generate view URL for non-saved entity of model '{}'.".format(self.model))
-
-        target_path = _router.ep_path('content@view', {'model': self.model, 'id': str(self.id)})
-        r_alias = _route_alias.get_by_target(target_path, self.language)
-        value = r_alias.alias if r_alias else target_path
-
-        return _router.url(value, lang=self.language)
-
-    @property
-    def route_alias(self) -> _route_alias.model.RouteAlias:
-        return self.f_get('route_alias')
 
     @property
     def views_count(self) -> int:
@@ -139,32 +123,6 @@ class Article(_content.model.Content):
     def ext_links(self) -> _Tuple[str]:
         return self.f_get('ext_links')
 
-    def _on_f_set(self, field_name: str, value, **kwargs):
-        """Hook.
-        """
-        if field_name == 'route_alias' and (isinstance(value, str) or value is None):
-            if value is None:
-                value = ''
-
-            # Delegate string generation to dedicated hook
-            route_alias_str = self._alter_route_alias_str(value.strip())
-
-            # No route alias is attached, so we need to create a new one
-            if not self.route_alias:
-                value = _route_alias.create(route_alias_str, 'NONE', self.language).save()
-
-            # Existing route alias is attached and its value needs to be changed
-            elif self.route_alias and self.route_alias.alias != route_alias_str:
-                with self.route_alias:
-                    self.route_alias.delete()
-                value = _route_alias.create(route_alias_str, 'NONE', self.language).save()
-
-            # Keep old route alias
-            else:
-                value = self.route_alias
-
-        return super()._on_f_set(field_name, value, **kwargs)
-
     def _on_f_get(self, field_name: str, value, **kwargs):
         """Hook.
         """
@@ -177,11 +135,6 @@ class Article(_content.model.Content):
         """Hook.
         """
         super()._pre_save(**kwargs)
-
-        # Route alias is required
-        if not self.route_alias:
-            # Setting None leads to route alias auto-generation
-            self.f_set('route_alias', None)
 
         if self.is_new:
             # Attach section to tags
@@ -197,20 +150,7 @@ class Article(_content.model.Content):
         """
         super()._after_save(first_save, **kwargs)
 
-        # Update route alias target which has been created in self._pre_save()
-        if self.route_alias.target == 'NONE':
-            with self.route_alias:
-                target = _router.ep_path('content@view', {'model': self.model, 'id': self.id})
-                self.route_alias.f_set('target', target).save()
-
         if first_save:
-            # Clean up not fully filled route aliases
-            f = _route_alias.find()
-            f.eq('target', 'NONE').lt('_created', _datetime.now() - _timedelta(1))
-            for ra in f.get():
-                with ra:
-                    ra.delete()
-
             # Recalculate tags weights
             if self.has_field('tags'):
                 for tag in self.tags:
@@ -263,10 +203,6 @@ class Article(_content.model.Content):
 
         # Enable permissions check
         _auth.restore_user()
-
-        # Delete linked route alias
-        with self.route_alias:
-            self.route_alias.delete()
 
     @classmethod
     def odm_ui_browser_setup(cls, browser: _odm_ui.Browser):
@@ -380,17 +316,6 @@ class Article(_content.model.Content):
                     required=True,
                 ))
 
-        # Visible only for admins
-        if _auth.get_current_user().is_admin:
-            # Route alias
-            frm.add_widget(_widget.input.Text(
-                uid='route_alias',
-                weight=2000,
-                label=self.t('path'),
-                value=self.route_alias.alias if self.route_alias else '',
-                enabled=not self.comments_count,
-            ))
-
     def _alter_route_alias_str(self, orig_str: str) -> str:
         """Alter route alias string.
         """
@@ -413,8 +338,6 @@ class Article(_content.model.Content):
 
     def as_jsonable(self, **kwargs):
         r = super().as_jsonable(**kwargs)
-
-        r['route_alias'] = self.route_alias.as_jsonable()
 
         if self.has_field('starred'):
             r['starred'] = self.starred
