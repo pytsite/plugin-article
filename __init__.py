@@ -8,10 +8,9 @@ __license__ = 'MIT'
 
 
 def _init():
-    from pytsite import lang, assetman
+    from pytsite import lang
 
     lang.register_package(__name__, alias='article')
-    assetman.register_package(__name__, alias='article')
 
 
 _init()

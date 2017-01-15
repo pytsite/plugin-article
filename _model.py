@@ -317,11 +317,6 @@ class Article(_content.model.Content):
 
         return r
 
-    def odm_ui_m_form_setup(self, frm: _form.Form):
-        """Hook.
-        """
-        _assetman.add('article@js/article-modify-form.js')
-
     def odm_ui_m_form_setup_widgets(self, frm: _form.Form):
         """Hook.
         """
