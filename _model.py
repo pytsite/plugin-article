@@ -342,9 +342,7 @@ class Article(_content.model.ContentWithURL):
         if self.has_field('starred'):
             r['starred'] = self.starred
         if self.has_field('section'):
-            r['section'] = self.section.as_jsonable()
-        if self.has_field('description'):
-            r['description'] = self.description
+            r['section'] = self.section.as_jsonable() if self.section else None
         if self.has_field('tags'):
             r['tags'] = [tag.as_jsonable() for tag in self.tags]
         if self.has_field('ext_links'):
