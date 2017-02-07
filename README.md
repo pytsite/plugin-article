@@ -3,7 +3,7 @@
 ## Changelog
 
 
-### 0.2.4 (2017-01-16)
+### 0.2.4 (2017-02-07)
 Fixed early route alias deletion.
 
 
