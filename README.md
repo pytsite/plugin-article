@@ -3,6 +3,10 @@
 ## Changelog
 
 
+### 0.2.4 (2017-01-16)
+Fixed early route alias deletion.
+
+
 ### 0.2.3 (2017-01-16)
 Field **description** removed from JSON representation, as parent class do this.
 

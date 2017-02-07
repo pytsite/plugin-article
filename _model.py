@@ -190,8 +190,6 @@ class Article(_content.model.ContentWithURL):
     def _after_delete(self, **kwargs):
         """Hook.
         """
-        super()._after_delete()
-
         # Disable permissions check
         _auth.switch_user_to_system()
 
@@ -203,6 +201,9 @@ class Article(_content.model.ContentWithURL):
 
         # Enable permissions check
         _auth.restore_user()
+
+        # We call this AFTER because super's method deletes route alias which is needed above
+        super()._after_delete()
 
     @classmethod
     def odm_ui_browser_setup(cls, browser: _odm_ui.Browser):
