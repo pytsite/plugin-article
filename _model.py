@@ -196,7 +196,7 @@ class Article(_content.model.ContentWithURL):
         # Delete comments
         try:
             _comments.delete_thread(self.route_alias.alias)
-        except (NotImplementedError, _comments.error.NoDriverRegistered):
+        except (NotImplementedError, _comments.error.NoDriversRegistered):
             pass
 
         # Enable permissions check

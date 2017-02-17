@@ -3,6 +3,10 @@
 ## Changelog
 
 
+### 0.2.5 (2017-02-17)
+Fixed comments exception handling.
+
+
 ### 0.2.4 (2017-02-07)
 Fixed early route alias deletion.
 
