@@ -1,6 +1,7 @@
 """PytSite Article Plugin Models.
 """
 from datetime import datetime as _datetime
+from random import random as _random, shuffle as _shuffle
 from typing import Tuple as _Tuple
 from pytsite import auth as _auth, odm_ui as _odm_ui, odm as _odm, widget as _widget, validation as _validation, \
     router as _router, lang as _lang, util as _util, form as _form, events as _events, errors as _errors
@@ -45,8 +46,33 @@ class Article(_content.model.ContentWithURL):
                 }
                 raise _errors.ForbidDeletion(_lang.t('article@tag_used_by_entity', error_args))
 
+        def on_content_generate(entity: _content.model.Content):
+            # Section
+            if entity.has_field('section') and entity.has_field('language'):
+                sections = list(_section.get(entity.language))
+                if not len(sections):
+                    raise RuntimeError('No sections found')
+
+                _shuffle(sections)
+                entity.f_set('section', sections[0])
+
+            # Tags
+            if entity.has_field('tags') and entity.has_field('language'):
+                # Generate tags
+                tags = list(_tag.get(5, entity.language))
+                if tags:
+                    _shuffle(tags)
+                    entity.f_set('tags', tags)
+
+            if entity.has_field('views_count'):
+                entity.f_set('views_count', int(_random() * 1000))
+
+            if entity.has_field('comments_count'):
+                entity.f_set('comments_count', int(_random() * 100))
+
         _events.listen('section.pre_delete', on_section_pre_delete)
         _events.listen('tag.pre_delete', on_tag_pre_delete)
+        _events.listen('content.generate', on_content_generate)
 
     def _setup_fields(self):
         """Hook.

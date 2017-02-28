@@ -1,6 +1,11 @@
 # PytSite Article Plugin
 
+
 ## Changelog
+
+
+### 0.3 (2017-02-28)
+Added `content:generate` console command handling.
 
 
 ### 0.2.5 (2017-02-17)
