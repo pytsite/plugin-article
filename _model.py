@@ -216,17 +216,15 @@ class Article(_content.model.ContentWithURL):
     def _after_delete(self, **kwargs):
         """Hook.
         """
-        # Disable permissions check
-        _auth.switch_user_to_system()
-
         # Delete comments
-        try:
-            _comments.delete_thread(self.route_alias.alias)
-        except (NotImplementedError, _comments.error.NoDriversRegistered):
-            pass
-
-        # Enable permissions check
-        _auth.restore_user()
+        if self.has_field('route_alias') and self.route_alias:
+            try:
+                _auth.switch_user_to_system()
+                _comments.delete_thread(self.route_alias.alias)
+            except (NotImplementedError, _comments.error.NoDriversRegistered):
+                pass
+            finally:
+                _auth.restore_user()
 
         # We call this AFTER because super's method deletes route alias which is needed above
         super()._after_delete()

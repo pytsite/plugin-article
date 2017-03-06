@@ -4,6 +4,10 @@
 ## Changelog
 
 
+### 0.3.1 (2017-03-06)
+Fixed processing entities with missed route alias.
+
+
 ### 0.3 (2017-02-28)
 Added `content:generate` console command handling.
 
