@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 0.3.2 (2017-05-03)
+- Removed section-tag relation.
+- Added missing translations.
+
+
 ### 0.3.1 (2017-03-06)
 Fixed processing entities with missed route alias.
 

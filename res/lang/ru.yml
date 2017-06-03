@@ -6,6 +6,7 @@ add_link: 'Добавить ссылку'
 starred: 'Закреплено'
 word_yes: 'Да'
 section_used_by_entity: 'Раздел ":section_title" используется :entity_model, ":entity_title"'
+tag_used_by_entity: 'Тег ":tag_title" используется :entity_model, ":entity_title"'
 
 odm_ui_browser_title_article: 'Статьи'
 odm_ui_form_title_create_article: 'Создание статьи'

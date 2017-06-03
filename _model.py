@@ -157,20 +157,6 @@ class Article(_content.model.ContentWithURL):
         else:
             return super()._on_f_get(field_name, value, **kwargs)
 
-    def _pre_save(self, **kwargs):
-        """Hook.
-        """
-        super()._pre_save(**kwargs)
-
-        if self.is_new:
-            # Attach section to tags
-            if self.has_field('section') and self.section and self.tags:
-                for tag in self.tags:
-                    with tag:
-                        _auth.switch_user_to_system()
-                        tag.f_add('sections', self.section).save()
-                        _auth.restore_user()
-
     def _after_save(self, first_save: bool = False, **kwargs):
         """Hook.
         """
