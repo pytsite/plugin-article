@@ -107,7 +107,7 @@ class Article(_content.model.ContentWithURL):
         return self.f_get('tags', sort_by='weight', sort_reverse=True)
 
     def odm_ui_m_form_url(self, args: dict = None) -> str:
-        return _router.ep_url('content@modify', {
+        return _router.rule_url('content@modify', {
             'model': self.model,
             'id': '0' if self.is_new else str(self.id),
             '__redirect': 'ENTITY_VIEW',
