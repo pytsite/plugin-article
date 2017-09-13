@@ -166,17 +166,16 @@ class Article(_content.model.ContentWithURL):
             # Recalculate tags weights
             if self.has_field('tags'):
                 for tag in self.tags:
-                    with tag:
-                        weight = 0
-                        for model in _content.get_models().keys():
-                            try:
-                                weight += _content.find(model, language=self.language).inc('tags', [tag]).count()
-                            except _odm.error.FieldNotDefined:
-                                pass
+                    weight = 0
+                    for model in _content.get_models().keys():
+                        try:
+                            weight += _content.find(model, language=self.language).inc('tags', [tag]).count()
+                        except _odm.error.FieldNotDefined:
+                            pass
 
-                        _auth.switch_user_to_system()
-                        tag.f_set('weight', weight).save()
-                        _auth.restore_user()
+                    _auth.switch_user_to_system()
+                    tag.f_set('weight', weight).save()
+                    _auth.restore_user()
 
         # Updating localization entities references.
         # For each language except current one
@@ -188,16 +187,14 @@ class Article(_content.model.ContentWithURL):
             if isinstance(localization, _content.model.Content):
                 # If localized entity hasn't reference to this entity, set it
                 if localization.f_get('localization_' + self.language) != self:
-                    with localization:
-                        localization.f_set('localization_' + self.language, self).save()
+                    localization.f_set('localization_' + self.language, self).save()
 
             # If localization is not set
             elif localization is None:
                 # Clear references from localized entities
                 f = _content.find(self.model, language=lng).eq('localization_' + self.language, self)
                 for referenced in f.get():
-                    with referenced:
-                        referenced.f_set('localization_' + self.language, None).save()
+                    referenced.f_set('localization_' + self.language, None).save()
 
     def _after_delete(self, **kwargs):
         """Hook.

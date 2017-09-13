@@ -1,6 +1,6 @@
 {
-  "name": "plugins.article",
-  "version": "0.3.4",
+  "name": "article",
+  "version": "0.4",
   "description": {
     "en": "Article",
     "ru": "Article",
