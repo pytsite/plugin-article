@@ -1,4 +1,4 @@
-"""PytSite Article Plugin.
+"""PytSite Article Plugin
 """
 from . import _model as model
 
@@ -10,7 +10,7 @@ __license__ = 'MIT'
 def _init():
     from pytsite import lang
 
-    lang.register_package(__name__, alias='article')
+    lang.register_package(__name__)
 
 
 _init()
