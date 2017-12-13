@@ -71,9 +71,9 @@ class Article(_content.model.ContentWithURL):
             if entity.has_field('comments_count'):
                 entity.f_set('comments_count', int(_random() * 100))
 
-        _events.listen('section.pre_delete', on_section_pre_delete)
-        _events.listen('tag.pre_delete', on_tag_pre_delete)
-        _events.listen('content.generate', on_content_generate)
+        _events.listen('section@pre_delete', on_section_pre_delete)
+        _events.listen('tag@pre_delete', on_tag_pre_delete)
+        _events.listen('content@generate', on_content_generate)
 
     def _setup_fields(self):
         """Hook.
