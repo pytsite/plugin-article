@@ -3,6 +3,12 @@
 
 ## Changelog
 
+
+### 2.1.2 (2018-02-20)
+
+Permissions issue fixed.
+
+
 ### 2.1.1 (2017-12-13)
 
 Events names fixed.

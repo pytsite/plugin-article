@@ -267,10 +267,11 @@ class Article(_content.model.ContentWithURL):
         """
         super().odm_ui_m_form_setup_widgets(frm)
 
-        current_user = _auth.get_current_user()
+        c_user = _auth.get_current_user()
 
         # Starred
-        if self.has_field('starred') and current_user.has_permission('content.set_starred.' + self.model):
+        if self.has_field('starred') and \
+                (c_user.has_permission('content.set_starred.' + self.model) or c_user.is_admin_or_dev):
             frm.add_widget(_widget.select.Checkbox(
                 uid='starred',
                 weight=100,
@@ -314,16 +315,16 @@ class Article(_content.model.ContentWithURL):
             frm.add_rule('ext_links', _validation.rule.Url())
 
         # Publish time
-        if self.has_field('publish_time'):
-            if current_user.has_permission('content.set_publish_time.' + self.model):
-                frm.add_widget(_widget.select.DateTime(
-                    uid='publish_time',
-                    weight=1300,
-                    label=self.t('publish_time'),
-                    value=_datetime.now() if self.is_new else self.publish_time,
-                    h_size='col-sm-4 col-md-3 col-lg-2',
-                    required=True,
-                ))
+        if self.has_field('publish_time') and \
+                (c_user.has_permission('content.set_publish_time.' + self.model) or c_user.is_admin_or_dev):
+            frm.add_widget(_widget.select.DateTime(
+                uid='publish_time',
+                weight=1300,
+                label=self.t('publish_time'),
+                value=_datetime.now() if self.is_new else self.publish_time,
+                h_size='col-sm-4 col-md-3 col-lg-2',
+                required=True,
+            ))
 
     def _alter_route_alias_str(self, orig_str: str) -> str:
         """Alter route alias string.

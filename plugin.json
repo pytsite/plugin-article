@@ -1,6 +1,6 @@
 {
   "name": "article",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": {
     "en": "Article",
     "ru": "Статья",
@@ -13,11 +13,10 @@
     "url": "https://shepetko.com"
   },
   "requires": {
-    "packages": [],
     "plugins": [
-      "auth",
+      "auth>=1.10",
       "comments",
-      "content",
+      "content>=2.5.1",
       "form",
       "odm",
       "odm_ui",
