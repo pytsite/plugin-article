@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.1.3 (2018-03-01)
+
+Typo fixed.
+
+
 ### 2.1.2 (2018-02-20)
 
 Permissions issue fixed.

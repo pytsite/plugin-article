@@ -24,4 +24,4 @@ odm_auth_delete_article: 'Удаление ЛЮБЫХ статей'
 content_perm_bypass_moderation_article: 'Публикация статей без модерации'
 content_perm_set_localization_article: 'Управление локализацией статей'
 content_perm_set_publish_time_article: 'Управление временем публикации статей'
-content_perm_set_starred_article: "Устанавливать флаг 'Закрепелно' для статей"
+content_perm_set_starred_article: "Устанавливать флаг 'Закреплено' для статей"
