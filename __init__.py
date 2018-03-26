@@ -4,11 +4,11 @@ __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
-from pytsite import plugman as _plugman
 
 # Public API
-if _plugman.is_installed(__name__):
-    from . import _model as model
+from . import _model as model
+from ._api import get_previous_entity, get_next_entity
+from ._model import Article
 
 
 def plugin_load():

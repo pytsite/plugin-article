@@ -14,7 +14,7 @@ __license__ = 'MIT'
 
 
 class Article(_content.model.ContentWithURL):
-    """Article Model.
+    """Article Model
     """
 
     @classmethod
