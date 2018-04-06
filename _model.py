@@ -1,16 +1,16 @@
 """PytSite Article Plugin Models
 """
+__author__ = 'Alexander Shepetko'
+__email__ = 'a@shepetko.com'
+__license__ = 'MIT'
+
 from datetime import datetime as _datetime
 from random import random as _random, shuffle as _shuffle
 from typing import Tuple as _Tuple
 from pytsite import validation as _validation, router as _router, lang as _lang, util as _util, events as _events, \
     errors as _errors
 from plugins import content as _content, comments as _comments, taxonomy as _taxonomy, tag as _tag, auth as _auth, \
-    section as _section, odm_ui as _odm_ui, odm as _odm, widget as _widget, form as _form
-
-__author__ = 'Alexander Shepetko'
-__email__ = 'a@shepetko.com'
-__license__ = 'MIT'
+    section as _section, odm_ui as _odm_ui, odm as _odm, widget as _widget, form as _form, permissions as _permissions
 
 
 class Article(_content.model.ContentWithURL):
@@ -70,6 +70,14 @@ class Article(_content.model.ContentWithURL):
 
             if entity.has_field('comments_count'):
                 entity.f_set('comments_count', int(_random() * 100))
+
+        super().on_register(model)
+
+        # Define 'set_starred' permission
+        if _odm.dispense(model).has_field('starred'):
+            perm_name = 'content@set_starred.' + model
+            perm_description = cls.resolve_msg_id('content_perm_set_starred_' + model)
+            _permissions.define_permission(perm_name, perm_description, cls.odm_auth_permissions_group())
 
         _events.listen('section@pre_delete', on_section_pre_delete)
         _events.listen('tag@pre_delete', on_tag_pre_delete)
@@ -271,7 +279,7 @@ class Article(_content.model.ContentWithURL):
 
         # Starred
         if self.has_field('starred') and \
-                (c_user.has_permission('content.set_starred.' + self.model) or c_user.is_admin_or_dev):
+                (c_user.has_permission('article@set_starred.' + self.model) or c_user.is_admin_or_dev):
             frm.add_widget(_widget.select.Checkbox(
                 uid='starred',
                 weight=100,

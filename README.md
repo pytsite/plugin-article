@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.3 (2018-04-06)
+
+Support of `content-3.0`.
+
+
 ### 2.2 (2018-03-26)
 
 New API methods added: `get_previous_entity()` and `get_next_entity()`.
