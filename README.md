@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.3.1 (2018-04-08)
+
+Permissions issue fix.
+
+
 ### 2.3 (2018-04-06)
 
 Support of `content-3.0`.

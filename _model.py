@@ -19,6 +19,8 @@ class Article(_content.model.ContentWithURL):
 
     @classmethod
     def on_register(cls, model: str):
+        super().on_register(model)
+
         def on_section_pre_delete(section: _section.model.Section):
             f = _content.find(model, status='*', check_publish_time=False)
             if not f.mock.has_field('section'):
@@ -71,12 +73,18 @@ class Article(_content.model.ContentWithURL):
             if entity.has_field('comments_count'):
                 entity.f_set('comments_count', int(_random() * 100))
 
-        super().on_register(model)
+        mock = _odm.dispense(model)
 
         # Define 'set_starred' permission
-        if _odm.dispense(model).has_field('starred'):
-            perm_name = 'content@set_starred.' + model
+        if mock.has_field('starred'):
+            perm_name = 'article@set_starred.' + model
             perm_description = cls.resolve_msg_id('content_perm_set_starred_' + model)
+            _permissions.define_permission(perm_name, perm_description, cls.odm_auth_permissions_group())
+
+        # Define 'set_publish_time' permission
+        if mock.has_field('publish_time'):
+            perm_name = 'article@set_publish_time.' + model
+            perm_description = cls.resolve_msg_id('content_perm_set_publish_time_' + model)
             _permissions.define_permission(perm_name, perm_description, cls.odm_auth_permissions_group())
 
         _events.listen('section@pre_delete', on_section_pre_delete)
@@ -324,7 +332,7 @@ class Article(_content.model.ContentWithURL):
 
         # Publish time
         if self.has_field('publish_time') and \
-                (c_user.has_permission('content.set_publish_time.' + self.model) or c_user.is_admin_or_dev):
+                (c_user.has_permission('article@set_publish_time.' + self.model) or c_user.is_admin_or_dev):
             frm.add_widget(_widget.select.DateTime(
                 uid='publish_time',
                 weight=1300,
