@@ -236,6 +236,7 @@ class Article(_content.model.ContentWithURL):
         super().odm_ui_browser_setup(browser)
 
         mock = _odm.dispense(browser.model)
+        c_user = _auth.get_current_user()
 
         # Sort field
         if mock.has_field('publish_time'):
@@ -286,8 +287,7 @@ class Article(_content.model.ContentWithURL):
         c_user = _auth.get_current_user()
 
         # Starred
-        if self.has_field('starred') and \
-                (c_user.has_permission('article@set_starred.' + self.model) or c_user.is_admin_or_dev):
+        if self.has_field('starred') and c_user.has_permission('article@set_starred.' + self.model):
             frm.add_widget(_widget.select.Checkbox(
                 uid='starred',
                 weight=100,
@@ -331,8 +331,7 @@ class Article(_content.model.ContentWithURL):
             frm.add_rule('ext_links', _validation.rule.Url())
 
         # Publish time
-        if self.has_field('publish_time') and \
-                (c_user.has_permission('article@set_publish_time.' + self.model) or c_user.is_admin_or_dev):
+        if self.has_field('publish_time') and c_user.has_permission('article@set_publish_time.' + self.model):
             frm.add_widget(_widget.select.DateTime(
                 uid='publish_time',
                 weight=1300,
