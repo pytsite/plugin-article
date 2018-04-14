@@ -248,7 +248,7 @@ class Article(_content.model.ContentWithURL):
             browser.insert_data_field('section', 'article@section')
 
         # Starred
-        if mock.has_field('starred'):
+        if mock.has_field('starred') and c_user.has_permission('article@set_starred.' + browser.model):
             browser.insert_data_field('starred', 'article@starred')
 
         # Publish time
