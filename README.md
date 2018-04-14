@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.4.2 (2018-04-14)
+
+Permissions issue fixed.
+
+
 ### 2.4.1 (2018-04-14)
 
 Permissions issue fixed.

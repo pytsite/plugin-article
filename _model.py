@@ -260,13 +260,14 @@ class Article(_content.model.ContentWithURL):
         """
         r = super().odm_ui_browser_row()
 
+        c_user = _auth.get_current_user()
+
         # Section
         if self.has_field('section'):
             r.append(self.section.title if self.section else '&nbsp;')
 
         # Starred
-        if self.has_field('starred'):
-            # 'Starred' flag
+        if self.has_field('starred') and c_user.has_permission('article@set_starred.' + self.model):
             if self.starred:
                 starred = '<span class="label label-primary">{}</span>'.format(_lang.t('article@word_yes'))
             else:
