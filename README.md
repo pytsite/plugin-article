@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.5 (2018-04-15)
+
+Support of `odm_ui-3.2`.
+
+
 ### 2.4.2 (2018-04-14)
 
 Permissions issue fixed.

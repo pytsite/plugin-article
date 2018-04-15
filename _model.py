@@ -126,7 +126,7 @@ class Article(_content.model.ContentWithURL):
     def odm_ui_m_form_url(self, args: dict = None) -> str:
         return _router.rule_url('content@modify', {
             'model': self.model,
-            'id': '0' if self.is_new else str(self.id),
+            'eid': '0' if self.is_new else str(self.id),
             '__redirect': 'ENTITY_VIEW',
         })
 

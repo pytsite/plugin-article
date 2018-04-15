@@ -1,6 +1,6 @@
 {
   "name": "article",
-  "version": "2.4.2",
+  "version": "2.5",
   "description": {
     "en": "Article",
     "ru": "Статья",
@@ -19,7 +19,7 @@
       "content>=3.1",
       "form",
       "odm",
-      "odm_ui",
+      "odm_ui>=3.2",
       "section",
       "tag",
       "taxonomy",
