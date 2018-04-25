@@ -190,9 +190,11 @@ class Article(_content.model.ContentWithURL):
                         except _odm.error.FieldNotDefined:
                             pass
 
-                    _auth.switch_user_to_system()
-                    tag.f_set('weight', weight).save()
-                    _auth.restore_user()
+                    try:
+                        _auth.switch_user_to_system()
+                        tag.f_set('weight', weight).save()
+                    finally:
+                        _auth.restore_user()
 
         # Updating localization entities references.
         # For each language except current one
