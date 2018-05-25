@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.6 (2018-05-25)
+
+Moved to separate `odm_auth`'s permission group.
+
+
 ### 2.5.1 (2018-04-25)
 
 Permissions issue fixed.

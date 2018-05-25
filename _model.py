@@ -123,6 +123,10 @@ class Article(_content.model.ContentWithURL):
     def tags(self) -> _Tuple[_tag.model.Tag]:
         return self.f_get('tags', sort_by='weight', sort_reverse=True)
 
+    @classmethod
+    def odm_auth_permissions_group(cls) -> str:
+        return 'article'
+
     def odm_ui_m_form_url(self, args: dict = None) -> str:
         return _router.rule_url('content@modify', {
             'model': self.model,
