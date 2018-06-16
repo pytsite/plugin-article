@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.7 (2018-06-16)
+
+`publish_time` fields moved back to the `content` plugin.
+
+
 ### 2.6 (2018-05-25)
 
 Moved to separate `odm_auth`'s permission group.

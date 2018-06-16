@@ -4,11 +4,9 @@ __author__ = 'Alexander Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
-from datetime import datetime as _datetime
 from random import random as _random, shuffle as _shuffle
 from typing import Tuple as _Tuple
-from pytsite import validation as _validation, router as _router, lang as _lang, util as _util, events as _events, \
-    errors as _errors
+from pytsite import validation as _validation, router as _router, lang as _lang,events as _events, errors as _errors
 from plugins import content as _content, comments as _comments, taxonomy as _taxonomy, tag as _tag, auth as _auth, \
     section as _section, odm_ui as _odm_ui, odm as _odm, widget as _widget, form as _form, permissions as _permissions
 
@@ -81,12 +79,6 @@ class Article(_content.model.ContentWithURL):
             perm_description = cls.resolve_msg_id('content_perm_set_starred_' + model)
             _permissions.define_permission(perm_name, perm_description, cls.odm_auth_permissions_group())
 
-        # Define 'set_publish_time' permission
-        if mock.has_field('publish_time'):
-            perm_name = 'article@set_publish_time.' + model
-            perm_description = cls.resolve_msg_id('content_perm_set_publish_time_' + model)
-            _permissions.define_permission(perm_name, perm_description, cls.odm_auth_permissions_group())
-
         _events.listen('section@pre_delete', on_section_pre_delete)
         _events.listen('tag@pre_delete', on_tag_pre_delete)
         _events.listen('content@generate', on_content_generate)
@@ -99,7 +91,6 @@ class Article(_content.model.ContentWithURL):
         self.get_field('images').required = True
         self.get_field('body').required = True
 
-        self.define_field(_odm.field.DateTime('publish_time', default=_datetime.now()))
         self.define_field(_odm.field.RefsUniqueList('tags', model='tag'))
         self.define_field(_odm.field.Ref('section', model='section', required=True))
         self.define_field(_odm.field.Bool('starred'))
@@ -115,7 +106,7 @@ class Article(_content.model.ContentWithURL):
         """
         super()._setup_indexes()
 
-        for f in 'publish_time', 'section', 'starred', 'views_count', 'comments_count':
+        for f in 'section', 'starred', 'views_count', 'comments_count':
             if self.has_field(f):
                 self.define_index([(f, _odm.I_ASC)])
 
@@ -141,22 +132,6 @@ class Article(_content.model.ContentWithURL):
     @property
     def comments_count(self) -> int:
         return self.f_get('comments_count')
-
-    @property
-    def publish_time(self) -> _datetime:
-        return self.f_get('publish_time')
-
-    @property
-    def publish_date_time_pretty(self) -> str:
-        return self.f_get('publish_time', fmt='pretty_date_time')
-
-    @property
-    def publish_date_pretty(self) -> str:
-        return self.f_get('publish_time', fmt='pretty_date')
-
-    @property
-    def publish_time_ago(self) -> str:
-        return self.f_get('publish_time', fmt='ago')
 
     @property
     def starred(self) -> bool:
@@ -244,11 +219,6 @@ class Article(_content.model.ContentWithURL):
         mock = _odm.dispense(browser.model)
         c_user = _auth.get_current_user()
 
-        # Sort field
-        if mock.has_field('publish_time'):
-            browser.default_sort_field = 'publish_time'
-            browser.default_sort_order = 'desc'
-
         # Section
         if mock.has_field('section'):
             browser.insert_data_field('section', 'article@section')
@@ -256,10 +226,6 @@ class Article(_content.model.ContentWithURL):
         # Starred
         if mock.has_field('starred') and c_user.has_permission('article@set_starred.' + browser.model):
             browser.insert_data_field('starred', 'article@starred')
-
-        # Publish time
-        if mock.has_field('publish_time'):
-            browser.insert_data_field('publish_time', 'article@publish_time')
 
     def odm_ui_browser_row(self) -> list:
         """Get single UI browser row hook.
@@ -279,10 +245,6 @@ class Article(_content.model.ContentWithURL):
             else:
                 starred = '&nbsp;'
             r.append(starred)
-
-        # Publish time
-        if self.has_field('publish_time'):
-            r.append(self.f_get('publish_time', fmt='%d.%m.%Y %H:%M'))
 
         return r
 
@@ -337,17 +299,6 @@ class Article(_content.model.ContentWithURL):
             ))
             frm.add_rule('ext_links', _validation.rule.Url())
 
-        # Publish time
-        if self.has_field('publish_time') and c_user.has_permission('article@set_publish_time.' + self.model):
-            frm.add_widget(_widget.select.DateTime(
-                uid='publish_time',
-                weight=1300,
-                label=self.t('publish_time'),
-                value=_datetime.now() if self.is_new else self.publish_time,
-                h_size='col-sm-4 col-md-3 col-lg-2',
-                required=True,
-            ))
-
     def _alter_route_alias_str(self, orig_str: str) -> str:
         """Alter route alias string.
         """
@@ -381,13 +332,6 @@ class Article(_content.model.ContentWithURL):
             r['ext_links'] = self.ext_links
         if self.has_field('status'):
             r['status'] = self.status
-        if self.has_field('publish_time'):
-            r['publish_time'] = {
-                'w3c': _util.w3c_datetime_str(self.publish_time),
-                'pretty_date': self.publish_date_pretty,
-                'pretty_date_time': self.publish_date_time_pretty,
-                'ago': self.publish_time_ago,
-            }
         if self.has_field('views_count'):
             r['views_count'] = self.views_count
         if self.has_field('comments_count'):
