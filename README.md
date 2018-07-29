@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.8 (2018-07-29)
+
+Support of `content-4.11`.
+
+
 ### 2.7 (2018-06-16)
 
 `publish_time` fields moved back to the `content` plugin.

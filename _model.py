@@ -259,7 +259,7 @@ class Article(_content.model.ContentWithURL):
         if self.has_field('starred') and c_user.has_permission('article@set_starred.' + self.model):
             frm.add_widget(_widget.select.Checkbox(
                 uid='starred',
-                weight=100,
+                weight=50,
                 label=self.t('starred'),
                 value=self.starred,
             ))
@@ -268,7 +268,7 @@ class Article(_content.model.ContentWithURL):
         if self.has_field('section'):
             frm.add_widget(_section.widget.SectionSelect(
                 uid='section',
-                weight=150,
+                weight=60,
                 label=self.t('section'),
                 value=self.section,
                 h_size='col-sm-6',
@@ -279,7 +279,7 @@ class Article(_content.model.ContentWithURL):
         if self.has_field('tags'):
             frm.add_widget(_taxonomy.widget.TokensInput(
                 uid='tags',
-                weight=450,
+                weight=250,
                 model='tag',
                 label=self.t('tags'),
                 value=self.tags,
@@ -290,7 +290,7 @@ class Article(_content.model.ContentWithURL):
         if self.has_field('ext_links'):
             frm.add_widget(_widget.input.StringList(
                 uid='ext_links',
-                weight=1100,
+                weight=550,
                 label=self.t('external_links'),
                 add_btn_label=self.t('add_link'),
                 value=self.ext_links,
