@@ -15,8 +15,6 @@ odm_ui_form_title_modify_article: 'Зміна статті'
 odm_ui_form_title_delete_article: 'Видалення статей'
 
 odm_auth_create_article: 'Створення статей'
-odm_auth_view_own_article: 'Перегляд ВЛАСНИХ статей'
-odm_auth_view_article: 'Перегляд ВСІХ статей'
 odm_auth_modify_own_article: 'Зміна ВЛАСНИХ статей'
 odm_auth_modify_article: 'Зміна БУДЬ-ЯКИХ статей'
 odm_auth_delete_own_article: 'Видалення ВЛАСНИХ статей'
