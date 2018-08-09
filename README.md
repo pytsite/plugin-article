@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.9.1 (2018-08-10)
+
+Little fixes to support Twitter Bootstrap 4.
+
+
 ### 2.9 (2018-08-09)
 
 Support of `odm_auth-1.9`.

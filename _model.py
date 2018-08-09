@@ -241,7 +241,8 @@ class Article(_content.model.ContentWithURL):
         # Starred
         if self.has_field('starred') and c_user.has_permission('article@set_starred.' + self.model):
             if self.starred:
-                starred = '<span class="label label-primary">{}</span>'.format(_lang.t('article@word_yes'))
+                starred = '<span class="label label-primary badge badge-primary">{}</span>'.\
+                    format(_lang.t('article@word_yes'))
             else:
                 starred = '&nbsp;'
             r.append(starred)
@@ -271,7 +272,7 @@ class Article(_content.model.ContentWithURL):
                 weight=60,
                 label=self.t('section'),
                 value=self.section,
-                h_size='col-sm-6',
+                h_size='col-xs-12 col-12 col-sm-6',
                 required=self.get_field('section').required,
             ))
 
