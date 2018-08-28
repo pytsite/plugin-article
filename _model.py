@@ -19,34 +19,6 @@ class Article(_content.model.ContentWithURL):
     def on_register(cls, model: str):
         super().on_register(model)
 
-        def on_section_pre_delete(section: _section.model.Section):
-            f = _content.find(model, status='*', check_publish_time=False)
-            if not f.mock.has_field('section'):
-                return
-
-            r_entity = f.eq('section', section).first()
-            if r_entity:
-                error_args = {
-                    'section_title': section.title,
-                    'entity_model': r_entity.model,
-                    'entity_title': r_entity.f_get('title')
-                }
-                raise _errors.ForbidDeletion(_lang.t('article@section_used_by_entity', error_args))
-
-        def on_tag_pre_delete(tag: _tag.model.Tag):
-            f = _content.find(model, status='*', check_publish_time=False)
-            if not f.mock.has_field('tags'):
-                return
-
-            r_entity = f.inc('tags', tag).first()
-            if r_entity:
-                error_args = {
-                    'tag_title': tag.title,
-                    'entity_model': r_entity.model,
-                    'entity_title': r_entity.f_get('title')
-                }
-                raise _errors.ForbidDeletion(_lang.t('article@tag_used_by_entity', error_args))
-
         def on_content_generate(entity: _content.model.Content):
             # Section
             if entity.has_field('section') and entity.has_field('language'):
@@ -79,8 +51,6 @@ class Article(_content.model.ContentWithURL):
             perm_description = cls.resolve_msg_id('content_perm_set_starred_' + model)
             _permissions.define_permission(perm_name, perm_description, cls.odm_auth_permissions_group())
 
-        _events.listen('section@pre_delete', on_section_pre_delete)
-        _events.listen('tag@pre_delete', on_tag_pre_delete)
         _events.listen('content@generate', on_content_generate)
 
     def _setup_fields(self):

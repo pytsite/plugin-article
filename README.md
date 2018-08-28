@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.10 (2018-08-28)
+
+Support of `odm-3.6`.
+
+
 ### 2.9.1 (2018-08-10)
 
 Little fixes to support Twitter Bootstrap 4.
