@@ -6,7 +6,7 @@ __license__ = 'MIT'
 
 from random import random as _random, shuffle as _shuffle
 from typing import Tuple as _Tuple
-from pytsite import validation as _validation, router as _router, lang as _lang,events as _events, errors as _errors
+from pytsite import validation as _validation, router as _router, lang as _lang, events as _events
 from plugins import content as _content, comments as _comments, taxonomy as _taxonomy, tag as _tag, auth as _auth, \
     section as _section, odm_ui as _odm_ui, odm as _odm, widget as _widget, form as _form, permissions as _permissions
 
@@ -211,7 +211,7 @@ class Article(_content.model.ContentWithURL):
         # Starred
         if self.has_field('starred') and c_user.has_permission('article@set_starred.' + self.model):
             if self.starred:
-                starred = '<span class="label label-primary badge badge-primary">{}</span>'.\
+                starred = '<span class="label label-primary badge badge-primary">{}</span>'. \
                     format(_lang.t('article@word_yes'))
             else:
                 starred = '&nbsp;'
@@ -289,6 +289,16 @@ class Article(_content.model.ContentWithURL):
                 raise RuntimeError('Cannot generate route alias because title is empty.')
 
         return orig_str
+
+    def content_breadcrumb(self, breadcrumb: _widget.select.Breadcrumb):
+        if self.has_field('section') and self.section:
+            breadcrumb.append_item(self.section.title, _router.rule_url('content@index', {
+                'model': self.model,
+                'term_field': 'section',
+                'term_alias': self.section.alias,
+            }))
+        elif self.has_field('title'):
+            breadcrumb.append_item(self.title)
 
     def as_jsonable(self, **kwargs):
         r = super().as_jsonable(**kwargs)

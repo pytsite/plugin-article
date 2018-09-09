@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.11 (2018-09-09)
+
+Support of `content-4.18`.
+
+
 ### 2.10 (2018-08-28)
 
 Support of `odm-3.6`.
