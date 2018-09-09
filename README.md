@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.11.1 (2018-09-09)
+
+Breadcrumb building fixed.
+
+
 ### 2.11 (2018-09-09)
 
 Support of `content-4.18`.

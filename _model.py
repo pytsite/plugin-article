@@ -297,7 +297,8 @@ class Article(_content.model.ContentWithURL):
                 'term_field': 'section',
                 'term_alias': self.section.alias,
             }))
-        elif self.has_field('title'):
+
+        if self.has_field('title'):
             breadcrumb.append_item(self.title)
 
     def as_jsonable(self, **kwargs):
