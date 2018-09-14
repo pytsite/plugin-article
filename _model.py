@@ -61,8 +61,8 @@ class Article(_content.model.ContentWithURL):
         self.get_field('images').required = True
         self.get_field('body').required = True
 
-        self.define_field(_odm.field.RefsUniqueList('tags', model='tag'))
-        self.define_field(_odm.field.Ref('section', model='section', required=True))
+        self.define_field(_tag.field.Tags('tags'))
+        self.define_field(_section.field.Section('section', required=True))
         self.define_field(_odm.field.Bool('starred'))
         self.define_field(_odm.field.Integer('views_count'))
         self.define_field(_odm.field.Integer('comments_count'))

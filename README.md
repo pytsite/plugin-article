@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 2.11.2 (2018-09-14)
+
+Cleanup.
+
+
 ### 2.11.1 (2018-09-09)
 
 Breadcrumb building fixed.
