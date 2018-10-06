@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.0 (2018-10-06)
+
+Support of `pystite-8.x`.
+
+
 ### 2.11.3 (2018-09-14)
 
 `plugin.json` fixed.

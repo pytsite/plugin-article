@@ -11,8 +11,6 @@ from ._model import Article
 
 
 def plugin_load():
-    from pytsite import lang
     from plugins import permissions
 
-    lang.register_package(__name__)
     permissions.define_group('article', 'article@articles')
