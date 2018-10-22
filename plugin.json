@@ -1,6 +1,6 @@
 {
   "name": "article",
-  "version": "3.0",
+  "version": "3.1",
   "description": {
     "en": "Article",
     "ru": "Статья",
@@ -25,7 +25,7 @@
       "section": "4.x",
       "tag": "4.x",
       "taxonomy": "5.x",
-      "widget": "3.x"
+      "widget": "4.x"
     }
   }
 }
