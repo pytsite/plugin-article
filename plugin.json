@@ -1,6 +1,6 @@
 {
   "name": "article",
-  "version": "3.1",
+  "version": "3.2",
   "description": {
     "en": "Article",
     "ru": "Статья",
@@ -19,7 +19,7 @@
       "comments": "2.x",
       "content": "5.x",
       "form": "5.x",
-      "odm": "5.x",
+      "odm": ">=5.1<6",
       "odm_auth": "2.x",
       "odm_ui": "4.x",
       "section": "4.x",

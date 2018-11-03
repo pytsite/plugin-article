@@ -48,7 +48,7 @@ class Article(_content.model.ContentWithURL):
         # Define 'set_starred' permission
         if mock.has_field('starred'):
             perm_name = 'article@set_starred.' + model
-            perm_description = cls.resolve_msg_id('content_perm_set_starred_' + model)
+            perm_description = cls.resolve_lang_msg_id('content_perm_set_starred_' + model)
             _permissions.define_permission(perm_name, perm_description, cls.odm_auth_permissions_group())
 
         _events.listen('content@generate', on_content_generate)
