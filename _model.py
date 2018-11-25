@@ -141,7 +141,7 @@ class Article(_content.model.ContentWithURL):
 
                     try:
                         _auth.switch_user_to_system()
-                        tag.f_set('weight', weight).save()
+                        tag.f_set('weight', weight).save(fast=True)
                     finally:
                         _auth.restore_user()
 
