@@ -4,9 +4,14 @@
 ## Changelog
 
 
+### 3.5 (2018-11-29)
+
+Support of `content-5.7`.
+
+
 ### 3.4 (2018-11-25)
 
-- Support of `odm-5.4`.
+Support of `odm-5.4`.
 
 
 ### 3.3 (2018-11-14)

@@ -197,25 +197,23 @@ class Article(_content.model.ContentWithURL):
         if mock.has_field('starred') and c_user.has_permission('article@set_starred.' + browser.model):
             browser.insert_data_field('starred', 'article@starred')
 
-    def odm_ui_browser_row(self) -> list:
+    def odm_ui_browser_row(self) -> dict:
         """Get single UI browser row hook.
         """
         r = super().odm_ui_browser_row()
 
-        c_user = _auth.get_current_user()
-
         # Section
-        if self.has_field('section'):
-            r.append(self.section.title if self.section else '&nbsp;')
+        if self.has_field('section') and self.section:
+            r['section'] = self.section.title
 
         # Starred
-        if self.has_field('starred') and c_user.has_permission('article@set_starred.' + self.model):
+        if self.has_field('starred') and _auth.get_current_user().has_permission('article@set_starred.' + self.model):
             if self.starred:
                 starred = '<span class="label label-primary badge badge-primary">{}</span>'. \
                     format(_lang.t('article@word_yes'))
             else:
                 starred = '&nbsp;'
-            r.append(starred)
+            r['starred'] = starred
 
         return r
 
