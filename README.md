@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.6 (2019-01-02)
+
+Support of `odm_ui-6.x`.
+
+
 ### 3.5 (2018-11-29)
 
 Support of `content-5.7`.
