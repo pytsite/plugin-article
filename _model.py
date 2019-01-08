@@ -180,21 +180,19 @@ class Article(_content.model.ContentWithURL):
         # We call this AFTER because super's method deletes route alias which is needed above
         super()._after_delete()
 
-    @classmethod
-    def odm_ui_browser_setup(cls, browser: _odm_ui.Browser):
+    def odm_ui_browser_setup(self, browser: _odm_ui.Browser):
         """Setup ODM UI browser hook.
         """
         super().odm_ui_browser_setup(browser)
 
-        mock = _odm.dispense(browser.model)
         c_user = _auth.get_current_user()
 
         # Section
-        if mock.has_field('section'):
+        if self.has_field('section'):
             browser.insert_data_field('section', 'article@section')
 
         # Starred
-        if mock.has_field('starred') and c_user.has_permission('article@set_starred.' + browser.model):
+        if self.has_field('starred') and c_user.has_permission('article@set_starred.' + browser.model):
             browser.insert_data_field('starred', 'article@starred')
 
     def odm_ui_browser_row(self) -> dict:
