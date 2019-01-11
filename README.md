@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.8.1 (2019-01-11)
+
+Typo fixed.
+
+
 ### 3.8 (2019-01-08)
 
 Support of `odm_ui-7.x`.
