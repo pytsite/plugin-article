@@ -26,3 +26,7 @@ content_perm_bypass_moderation_article: 'Публікація статей бе�
 content_perm_set_localization_article: 'Управління локалізацією статей'
 content_perm_set_publish_time_article: 'Управління часом публікації статей'
 content_perm_set_starred_article: "Встановлювати прапор 'Закріплено' для статей"
+
+content_status_article_published: 'Опубліковано'
+content_status_article_waiting: 'На модерації'
+content_status_article_unpublished: 'Чернетка'

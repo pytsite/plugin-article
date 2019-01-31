@@ -26,3 +26,7 @@ content_perm_bypass_moderation_article: 'Publish articles without moderation'
 content_perm_set_localization_article: 'Manage localizations of articles'
 content_perm_set_publish_time_article: 'Manage publish time of articles'
 content_perm_set_starred_article: "Set 'Starred' flag of articles"
+
+content_status_article_published: 'Published'
+content_status_article_waiting: 'Waiting for moderation'
+content_status_article_unpublished: 'Draft'

@@ -26,3 +26,7 @@ content_perm_bypass_moderation_article: 'Публикация статей бе�
 content_perm_set_localization_article: 'Управление локализацией статей'
 content_perm_set_publish_time_article: 'Управление временем публикации статей'
 content_perm_set_starred_article: "Устанавливать флаг 'Закреплено' для статей"
+
+content_status_article_published: 'Опубликовано'
+content_status_article_waiting: 'На модерации'
+content_status_article_unpublished: 'Черновик'

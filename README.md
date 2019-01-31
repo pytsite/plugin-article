@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.9 (2019-01-31)
+
+Support of `content-5.16`.
+
+
 ### 3.8.1 (2019-01-11)
 
 Typo fixed.
