@@ -14,3 +14,10 @@ def plugin_load():
     from plugins import permissions
 
     permissions.define_group('article', 'article@articles')
+
+
+def plugin_load_wsgi():
+    from plugins import content
+    from . import _eh
+
+    content.on_content_view(_eh.on_content_view)

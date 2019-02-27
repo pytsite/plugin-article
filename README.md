@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.10.1 (2019-02-27)
+
+Comments counter update fixed.
+
+
 ### 3.10 (2019-02-27)
 
 Part of code moved from `content`.
