@@ -120,6 +120,15 @@ class Article(_content.model.ContentWithURL):
         """
         if field_name == 'tags' and kwargs.get('as_string'):
             return ','.join([tag.title for tag in self.f_get('tags')])
+        elif field_name == 'comments_count' and self.has_field('route_alias') and self.route_alias:
+            # Update entity's comments count
+            try:
+                _auth.switch_user_to_system()
+                cnt = _comments.get_all_comments_count(self.route_alias.alias)
+                self.f_set('comments_count', cnt).save(fast=True)
+                return cnt
+            finally:
+                _auth.restore_user()
         else:
             return super()._on_f_get(field_name, value, **kwargs)
 
@@ -168,7 +177,8 @@ class Article(_content.model.ContentWithURL):
         """Hook.
         """
         # Delete comments
-        if self.has_field('route_alias') and self.route_alias:
+        if self.has_field('comments_count') and self.comments_count and \
+                self.has_field('route_alias') and self.route_alias:
             try:
                 _auth.switch_user_to_system()
                 _comments.delete_thread(self.route_alias.alias)

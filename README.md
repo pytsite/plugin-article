@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.10 (2019-02-27)
+
+Part of code moved from `content`.
+
+
 ### 3.9 (2019-01-31)
 
 Support of `content-5.16`.

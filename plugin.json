@@ -1,6 +1,6 @@
 {
   "name": "article",
-  "version": "3.9",
+  "version": "3.10",
   "description": {
     "en": "Article",
     "ru": "Статья",
@@ -13,19 +13,19 @@
     "url": "https://shepetko.com"
   },
   "requires": {
-    "pytsite": "8.x",
+    "pytsite": ">=8.9",
     "plugins": {
-      "auth": "3.x",
-      "comments": "2.x",
-      "content": ">=5.16<6",
-      "form": "5.x",
-      "odm": ">=5.4<6",
-      "odm_auth": "3.x",
-      "odm_ui": "7.x",
-      "section": "4.x",
-      "tag": "4.x",
-      "taxonomy": "5.x",
-      "widget": "4.x"
+      "auth": "^3.0",
+      "comments": "^2.0",
+      "content": "^5.18.1",
+      "form": "^5.0",
+      "odm": "^5.4",
+      "odm_auth": "^3.0",
+      "odm_ui": "^7.0",
+      "section": "^4.0",
+      "tag": "^4.0",
+      "taxonomy": "^5.0",
+      "widget": "^4.0"
     }
   }
 }
