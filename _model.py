@@ -240,7 +240,7 @@ class Article(_content.model.ContentWithURL):
                 label=self.t('section'),
                 value=self.section,
                 h_size='col-xs-12 col-12 col-sm-6',
-                required=self.get_field('section').required,
+                required=self.get_field('section').is_required,
             ))
 
         # Tags
@@ -251,7 +251,7 @@ class Article(_content.model.ContentWithURL):
                 model='tag',
                 label=self.t('tags'),
                 value=self.tags,
-                required=self.get_field('tags').required,
+                required=self.get_field('tags').is_required,
             ))
 
         # External links
@@ -263,7 +263,7 @@ class Article(_content.model.ContentWithURL):
                 add_btn_label=self.t('add_link'),
                 value=self.ext_links,
                 unique=True,
-                required=self.get_field('ext_links').required,
+                required=self.get_field('ext_links').is_required,
             ))
             frm.add_rule('ext_links', _validation.rule.Url())
 
