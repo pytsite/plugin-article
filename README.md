@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.11 (2019-03-04)
+
+Support of `odm-6.0`.
+
+
 ### 3.10.1 (2019-02-27)
 
 Comments counter update fixed.

@@ -19,7 +19,7 @@
       "comments": "^2.0",
       "content": "^5.19",
       "form": "^5.0",
-      "odm": "^5.4",
+      "odm": "^6.0",
       "odm_auth": "^3.0",
       "odm_ui": "^7.0",
       "section": "^4.0",

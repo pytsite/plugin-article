@@ -58,15 +58,15 @@ class Article(_content.model.ContentWithURL):
         """
         super()._setup_fields()
 
-        self.get_field('images').required = True
-        self.get_field('body').required = True
+        self.get_field('images').is_required = True
+        self.get_field('body').is_required = True
 
         self.define_field(_tag.field.Tags('tags'))
-        self.define_field(_section.field.Section('section', required=True))
+        self.define_field(_section.field.Section('section', is_required=True))
         self.define_field(_odm.field.Bool('starred'))
         self.define_field(_odm.field.Integer('views_count'))
         self.define_field(_odm.field.Integer('comments_count'))
-        self.define_field(_odm.field.StringList('ext_links', unique=True))
+        self.define_field(_odm.field.UniqueStringList('ext_links'))
 
         for lng in _lang.langs():
             self.define_field(_odm.field.Ref('localization_' + lng, model=self.model))
@@ -123,10 +123,10 @@ class Article(_content.model.ContentWithURL):
         else:
             return super()._on_f_get(field_name, value, **kwargs)
 
-    def _after_save(self, first_save: bool = False, **kwargs):
+    def _on_after_save(self, first_save: bool = False, **kwargs):
         """Hook.
         """
-        super()._after_save(first_save, **kwargs)
+        super()._on_after_save(first_save, **kwargs)
 
         if first_save:
             # Recalculate tags weights
@@ -164,7 +164,7 @@ class Article(_content.model.ContentWithURL):
                 for referenced in f.get():
                     referenced.f_set('localization_' + self.language, None).save()
 
-    def _after_delete(self, **kwargs):
+    def _on_after_delete(self, **kwargs):
         """Hook.
         """
         # Delete comments
@@ -179,7 +179,7 @@ class Article(_content.model.ContentWithURL):
                 _auth.restore_user()
 
         # We call this AFTER because super's method deletes route alias which is needed above
-        super()._after_delete()
+        super()._on_after_delete()
 
     def odm_ui_browser_setup(self, browser: _odm_ui.Browser):
         """Setup ODM UI browser hook.
