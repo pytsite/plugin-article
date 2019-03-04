@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.11.1 (2019-03-04)
+
+`plugin.json` fixed.
+
+
 ### 3.11 (2019-03-04)
 
 Support of `odm-6.0`.
