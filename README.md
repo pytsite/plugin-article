@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.11.3 (2019-04-09)
+
+Improper usage of `odm_ui_m_form_url()` fixed.
+
+
 ### 3.11.2 (2019-03-04)
 
 Missing support of `odm-6.0` fixed.

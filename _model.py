@@ -88,12 +88,9 @@ class Article(_content.model.ContentWithURL):
     def odm_auth_permissions_group(cls) -> str:
         return 'article'
 
-    def odm_ui_m_form_url(self, args: dict = None, **kwargs) -> str:
-        return _router.rule_url('content@modify', {
-            'model': self.model,
-            'eid': '0' if self.is_new else str(self.id),
-            '__redirect': 'ENTITY_VIEW',
-        })
+    @classmethod
+    def odm_ui_m_form_rule(cls) -> str:
+        return 'content@modify'
 
     @property
     def views_count(self) -> int:
@@ -262,7 +259,6 @@ class Article(_content.model.ContentWithURL):
                 label=self.t('external_links'),
                 add_btn_label=self.t('add_link'),
                 value=self.ext_links,
-                unique=True,
                 required=self.get_field('ext_links').is_required,
             ))
             frm.add_rule('ext_links', _validation.rule.Url())
