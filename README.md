@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.11.4 (2019-04-09)
+
+Improper usage of `odm_ui_m_form_url()` fixed #2.
+
+
 ### 3.11.3 (2019-04-09)
 
 Improper usage of `odm_ui_m_form_url()` fixed.

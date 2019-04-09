@@ -88,10 +88,6 @@ class Article(_content.model.ContentWithURL):
     def odm_auth_permissions_group(cls) -> str:
         return 'article'
 
-    @classmethod
-    def odm_ui_m_form_rule(cls) -> str:
-        return 'content@modify'
-
     @property
     def views_count(self) -> int:
         return self.f_get('views_count')
