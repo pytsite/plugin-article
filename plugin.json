@@ -1,6 +1,6 @@
 {
   "name": "article",
-  "version": "3.11.4",
+  "version": "3.12",
   "description": {
     "en": "Article",
     "ru": "Статья",
@@ -17,7 +17,7 @@
     "plugins": {
       "auth": "^3.0",
       "comments": "^2.0",
-      "content": "^5.19",
+      "content": "^6.0",
       "form": "^5.0",
       "odm": "^6.0",
       "odm_auth": "^3.0",
