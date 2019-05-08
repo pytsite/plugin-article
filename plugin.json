@@ -1,6 +1,6 @@
 {
   "name": "article",
-  "version": "3.12",
+  "version": "3.13",
   "description": {
     "en": "Article",
     "ru": "Статья",
@@ -16,7 +16,7 @@
     "pytsite": ">=8.9",
     "plugins": {
       "auth": "^3.0",
-      "comments": "^2.0",
+      "comments": "^3.0",
       "content": "^6.0",
       "form": "^5.0",
       "odm": "^6.0",

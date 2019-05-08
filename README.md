@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.13 (2019-05-08)
+
+Support of `comments-3.0`.
+
+
 ### 3.12 (2019-04-10)
 
 Support of `content-6.0`.
