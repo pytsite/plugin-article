@@ -4,6 +4,11 @@
 ## Changelog
 
 
+### 3.14 (2019-06-04)
+
+Support of `odm_auth-4.0`.
+
+
 ### 3.13 (2019-05-08)
 
 Support of `comments-3.0`.

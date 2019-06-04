@@ -4,14 +4,13 @@ __author__ = 'Oleksandr Shepetko'
 __email__ = 'a@shepetko.com'
 __license__ = 'MIT'
 
-from random import random as _random, shuffle as _shuffle
-from typing import Tuple as _Tuple
-from pytsite import validation as _validation, router as _router, lang as _lang, events as _events
-from plugins import content as _content, comments as _comments, taxonomy as _taxonomy, tag as _tag, auth as _auth, \
-    section as _section, odm_ui as _odm_ui, odm as _odm, widget as _widget, form as _form, permissions as _permissions
+from random import random, shuffle
+from typing import Tuple
+from pytsite import validation, router, lang, events
+from plugins import content, comments, taxonomy, tag, auth, section, odm_ui, odm, widget, form, permissions
 
 
-class Article(_content.model.ContentWithURL):
+class Article(content.model.ContentWithURL):
     """Article Model
     """
 
@@ -19,39 +18,39 @@ class Article(_content.model.ContentWithURL):
     def on_register(cls, model: str):
         super().on_register(model)
 
-        def on_content_generate(entity: _content.model.Content):
+        def on_content_generate(entity: content.model.Content):
             # Section
             if entity.has_field('section') and entity.has_field('language'):
-                sections = list(_section.get(entity.language))
+                sections = list(section.get(entity.language))
                 if not len(sections):
                     raise RuntimeError('No sections found')
 
-                _shuffle(sections)
+                shuffle(sections)
                 entity.f_set('section', sections[0])
 
             # Tags
             if entity.has_field('tags') and entity.has_field('language'):
                 # Generate tags
-                tags = list(_tag.get(5, entity.language))
+                tags = list(tag.get(5, entity.language))
                 if tags:
-                    _shuffle(tags)
+                    shuffle(tags)
                     entity.f_set('tags', tags)
 
             if entity.has_field('views_count'):
-                entity.f_set('views_count', int(_random() * 1000))
+                entity.f_set('views_count', int(random() * 1000))
 
             if entity.has_field('comments_count'):
-                entity.f_set('comments_count', int(_random() * 100))
+                entity.f_set('comments_count', int(random() * 100))
 
-        mock = _odm.dispense(model)
+        mock = odm.dispense(model)
 
         # Define 'set_starred' permission
         if mock.has_field('starred'):
             perm_name = 'article@set_starred.' + model
             perm_description = cls.resolve_lang_msg_id('content_perm_set_starred_' + model)
-            _permissions.define_permission(perm_name, perm_description, cls.odm_auth_permissions_group())
+            permissions.define_permission(perm_name, perm_description, cls.odm_auth_permissions_group())
 
-        _events.listen('content@generate', on_content_generate)
+        events.listen('content@generate', on_content_generate)
 
     def _setup_fields(self):
         """Hook.
@@ -61,15 +60,15 @@ class Article(_content.model.ContentWithURL):
         self.get_field('images').is_required = True
         self.get_field('body').is_required = True
 
-        self.define_field(_tag.field.Tags('tags'))
-        self.define_field(_section.field.Section('section', is_required=True))
-        self.define_field(_odm.field.Bool('starred'))
-        self.define_field(_odm.field.Integer('views_count'))
-        self.define_field(_odm.field.Integer('comments_count'))
-        self.define_field(_odm.field.UniqueStringList('ext_links'))
+        self.define_field(tag.field.Tags('tags'))
+        self.define_field(section.field.Section('section', is_required=True))
+        self.define_field(odm.field.Bool('starred'))
+        self.define_field(odm.field.Integer('views_count'))
+        self.define_field(odm.field.Integer('comments_count'))
+        self.define_field(odm.field.UniqueStringList('ext_links'))
 
-        for lng in _lang.langs():
-            self.define_field(_odm.field.Ref('localization_' + lng, model=self.model))
+        for lng in lang.langs():
+            self.define_field(odm.field.Ref('localization_' + lng, model=self.model))
 
     def _setup_indexes(self):
         """Hook.
@@ -78,10 +77,10 @@ class Article(_content.model.ContentWithURL):
 
         for f in 'section', 'starred', 'views_count', 'comments_count':
             if self.has_field(f):
-                self.define_index([(f, _odm.I_ASC)])
+                self.define_index([(f, odm.I_ASC)])
 
     @property
-    def tags(self) -> _Tuple[_tag.model.Tag]:
+    def tags(self) -> Tuple[tag.model.Tag]:
         return self.f_get('tags', sort_by='weight', sort_reverse=True)
 
     @classmethod
@@ -101,18 +100,18 @@ class Article(_content.model.ContentWithURL):
         return self.f_get('starred')
 
     @property
-    def section(self) -> _section.model.Section:
+    def section(self) -> section.model.Section:
         return self.f_get('section')
 
     @property
-    def ext_links(self) -> _Tuple[str]:
+    def ext_links(self) -> Tuple[str]:
         return self.f_get('ext_links')
 
     def _on_f_get(self, field_name: str, value, **kwargs):
         """Hook.
         """
         if field_name == 'tags' and kwargs.get('as_string'):
-            return ','.join([tag.title for tag in self.f_get('tags')])
+            return ','.join([t.title for t in self.f_get('tags')])
         else:
             return super()._on_f_get(field_name, value, **kwargs)
 
@@ -124,28 +123,28 @@ class Article(_content.model.ContentWithURL):
         if first_save:
             # Recalculate tags weights
             if self.has_field('tags'):
-                for tag in self.tags:
+                for t in self.tags:
                     weight = 0
-                    for model in _content.get_models().keys():
+                    for model in content.get_models().keys():
                         try:
-                            weight += _content.find(model, language=self.language).inc('tags', [tag]).count()
-                        except _odm.error.FieldNotDefined:
+                            weight += content.find(model, language=self.language).inc('tags', [t]).count()
+                        except odm.error.FieldNotDefined:
                             pass
 
                     try:
-                        _auth.switch_user_to_system()
-                        tag.f_set('weight', weight).save(fast=True)
+                        auth.switch_user_to_system()
+                        t.f_set('weight', weight).save(fast=True)
                     finally:
-                        _auth.restore_user()
+                        auth.restore_user()
 
         # Updating localization entities references.
         # For each language except current one
-        for lng in _lang.langs(False):
+        for lng in lang.langs(False):
             # Get localization ref for lng
             localization = self.f_get('localization_' + lng)
 
             # If localization is set
-            if isinstance(localization, _content.model.Content):
+            if isinstance(localization, content.model.Content):
                 # If localized entity hasn't reference to this entity, set it
                 if localization.f_get('localization_' + self.language) != self:
                     localization.f_set('localization_' + self.language, self).save()
@@ -153,7 +152,7 @@ class Article(_content.model.ContentWithURL):
             # If localization is not set
             elif localization is None:
                 # Clear references from localized entities
-                f = _content.find(self.model, language=lng).eq('localization_' + self.language, self)
+                f = content.find(self.model, language=lng).eq('localization_' + self.language, self)
                 for referenced in f.get():
                     referenced.f_set('localization_' + self.language, None).save()
 
@@ -164,22 +163,22 @@ class Article(_content.model.ContentWithURL):
         if self.has_field('comments_count') and self.comments_count and \
                 self.has_field('route_alias') and self.route_alias:
             try:
-                _auth.switch_user_to_system()
-                _comments.delete_thread(self.route_alias.alias)
-            except (NotImplementedError, _comments.error.NoDriversRegistered):
+                auth.switch_user_to_system()
+                comments.delete_thread(self.route_alias.alias)
+            except (NotImplementedError, comments.error.NoDriversRegistered):
                 pass
             finally:
-                _auth.restore_user()
+                auth.restore_user()
 
         # We call this AFTER because super's method deletes route alias which is needed above
         super()._on_after_delete()
 
-    def odm_ui_browser_setup(self, browser: _odm_ui.Browser):
+    def odm_ui_browser_setup(self, browser: odm_ui.Browser):
         """Setup ODM UI browser hook.
         """
         super().odm_ui_browser_setup(browser)
 
-        c_user = _auth.get_current_user()
+        c_user = auth.get_current_user()
 
         # Section
         if self.has_field('section'):
@@ -199,26 +198,26 @@ class Article(_content.model.ContentWithURL):
             r['section'] = self.section.title
 
         # Starred
-        if self.has_field('starred') and _auth.get_current_user().has_permission('article@set_starred.' + self.model):
+        if self.has_field('starred') and auth.get_current_user().has_permission('article@set_starred.' + self.model):
             if self.starred:
                 starred = '<span class="label label-primary badge badge-primary">{}</span>'. \
-                    format(_lang.t('article@word_yes'))
+                    format(lang.t('article@word_yes'))
             else:
                 starred = '&nbsp;'
             r['starred'] = starred
 
         return r
 
-    def odm_ui_m_form_setup_widgets(self, frm: _form.Form):
+    def odm_ui_m_form_setup_widgets(self, frm: form.Form):
         """Hook.
         """
         super().odm_ui_m_form_setup_widgets(frm)
 
-        c_user = _auth.get_current_user()
+        c_user = auth.get_current_user()
 
         # Starred
         if self.has_field('starred') and c_user.has_permission('article@set_starred.' + self.model):
-            frm.add_widget(_widget.select.Checkbox(
+            frm.add_widget(widget.select.Checkbox(
                 uid='starred',
                 weight=50,
                 label=self.t('starred'),
@@ -227,7 +226,7 @@ class Article(_content.model.ContentWithURL):
 
         # Section
         if self.has_field('section'):
-            frm.add_widget(_section.widget.SectionSelect(
+            frm.add_widget(section.widget.SectionSelect(
                 uid='section',
                 weight=60,
                 label=self.t('section'),
@@ -238,7 +237,7 @@ class Article(_content.model.ContentWithURL):
 
         # Tags
         if self.has_field('tags'):
-            frm.add_widget(_taxonomy.widget.TokensInput(
+            frm.add_widget(taxonomy.widget.TokensInput(
                 uid='tags',
                 weight=250,
                 model='tag',
@@ -249,7 +248,7 @@ class Article(_content.model.ContentWithURL):
 
         # External links
         if self.has_field('ext_links'):
-            frm.add_widget(_widget.input.StringList(
+            frm.add_widget(widget.input.StringList(
                 uid='ext_links',
                 weight=550,
                 label=self.t('external_links'),
@@ -257,7 +256,7 @@ class Article(_content.model.ContentWithURL):
                 value=self.ext_links,
                 required=self.get_field('ext_links').is_required,
             ))
-            frm.add_rule('ext_links', _validation.rule.Url())
+            frm.add_rule('ext_links', validation.rule.Url())
 
     def _alter_route_alias_str(self, orig_str: str) -> str:
         """Alter route alias string.
@@ -279,9 +278,9 @@ class Article(_content.model.ContentWithURL):
 
         return orig_str
 
-    def content_breadcrumb(self, breadcrumb: _widget.select.Breadcrumb):
+    def content_breadcrumb(self, breadcrumb: widget.select.Breadcrumb):
         if self.has_field('section') and self.section:
-            breadcrumb.append_item(self.section.title, _router.rule_url('content@index', {
+            breadcrumb.append_item(self.section.title, router.rule_url('content@index', {
                 'model': self.model,
                 'term_field': 'section',
                 'term_alias': self.section.alias,
@@ -298,7 +297,7 @@ class Article(_content.model.ContentWithURL):
         if self.has_field('section'):
             r['section'] = self.section.as_jsonable() if self.section else None
         if self.has_field('tags'):
-            r['tags'] = [tag.as_jsonable() for tag in self.tags]
+            r['tags'] = [t.as_jsonable() for t in self.tags]
         if self.has_field('ext_links'):
             r['ext_links'] = self.ext_links
         if self.has_field('status'):
@@ -308,7 +307,7 @@ class Article(_content.model.ContentWithURL):
         if self.has_field('comments_count'):
             r['comments_count'] = self.comments_count
 
-        for lng in _lang.langs():
+        for lng in lang.langs():
             if self.has_field('localization_' + lng):
                 ref = self.f_get('localization_' + lng)
                 if ref:
