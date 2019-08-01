@@ -1,12 +1,7 @@
 articles: 'Articles'
 section: 'Section'
-tags: 'Tags'
-external_links: 'Links'
-add_link: 'Add a link'
 starred: 'Starred'
 word_yes: 'Yes'
-section_used_by_entity: 'Section ":section_title" is used by entity :entity_model, ":entity_title"'
-tag_used_by_entity: 'Tag ":tag_title" is used by :entity_model, ":entity_title"'
 
 odm_ui_browser_title_article: 'Articles'
 odm_ui_form_title_create_article: 'Create article'

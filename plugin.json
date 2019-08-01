@@ -1,6 +1,6 @@
 {
   "name": "article",
-  "version": "3.14",
+  "version": "4.0",
   "description": {
     "en": "Article",
     "ru": "Статья",
@@ -16,15 +16,13 @@
     "pytsite": ">=8.9",
     "plugins": {
       "auth": "^3.0",
-      "comments": "^3.0",
-      "content": "^6.0",
+      "content": "^7.0",
       "form": "^5.0",
       "odm": "^6.0",
       "odm_auth": "^4.0",
       "odm_ui": "^7.0",
       "section": "^4.0",
       "tag": "^4.0",
-      "taxonomy": "^5.0",
       "widget": "^4.0"
     }
   }

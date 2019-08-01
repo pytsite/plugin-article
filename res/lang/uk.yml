@@ -1,12 +1,7 @@
 articles: 'Статті'
 section: 'Розділ'
-tags: 'Теги'
-external_links: 'Посилання'
-add_link: 'Додати посилання'
 starred: 'Закріплено'
 word_yes: 'Так'
-section_used_by_entity: 'Розділ ":section_title" використовується :entity_model, ":entity_title"'
-tag_used_by_entity: 'Тег ":tag_title" використовується :entity_model, ":entity_title"'
 
 odm_ui_browser_title_article: 'Статті'
 odm_ui_form_title_create_article: 'Створення статті'
